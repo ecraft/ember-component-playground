@@ -10,6 +10,9 @@ module.exports = function(defaults) {
     }
   });
 
+  // Required to compile templates at runtime?
+  app.import('bower_components/ember/ember-template-compiler.js');
+
   /*
     This build file specifies the options for the dummy test app of this
     addon, located in `/tests/dummy`
