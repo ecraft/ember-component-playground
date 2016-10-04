@@ -7,8 +7,12 @@ export default Component.extend({
   classNames: ['ember-component-playground'],
 
   layout: hbs`
-    {{textarea value=code classNames="u-full-width"}}
+    <div class="playground-preview">
+      {{component-playground.playground-preview code=code}}
+    </div>
 
-    {{component-playground.playground-preview code=code}}
+    <div class="playground-code">
+      {{textarea value=code classNames="code-input"}}
+    </div>
   `
 });

@@ -7,9 +7,15 @@ export default Component.extend({
   compilerError: '',
   partialName: '',
 
+  classNames: ['preview-wrapper'],
+
   layout: hbs`
-    {{partial partialName}}
-    {{compilerError}}
+    <div class="partial-wrapper">
+      {{partial partialName}}
+    </div>
+    <div class="compiler-error">
+      <p class="error-message">{{compilerError}}</p>
+    </div>
   `,
 
   didReceiveAttrs(attrs) {
