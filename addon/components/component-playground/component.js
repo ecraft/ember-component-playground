@@ -12,7 +12,16 @@ export default Component.extend({
     </div>
 
     <div class="playground-code">
-      {{textarea value=code classNames="code-input"}}
+      {{ivy-codemirror classNames="code-mirror"
+        value=code
+        options=(hash lineNumbers=true mode="handlebars" theme="monokai")
+        valueUpdated=(action "codeChange")}}
     </div>
-  `
+  `,
+
+  actions: {
+    codeChange(code) {
+      this.set('code', code);
+    }
+  }
 });

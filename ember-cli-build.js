@@ -7,6 +7,11 @@ module.exports = function(defaults) {
 
     sassOptions: {
       extension: 'scss'
+    },
+
+    codemirror: {
+      modes: ['handlebars'],
+      themes: ['monokai']
     }
   });
 
