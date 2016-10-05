@@ -1,13 +1,17 @@
-# Ember-component-playground
+# Ember Component Playground
 
-This README outlines the details of collaborating on this Ember addon.
+An Ember component for real time rendering of components.
 
 ## Installation
 
-* `git clone <repository-url>` this repository
-* `cd ember-component-playground`
-* `npm install`
-* `bower install`
+TODO: Publish to NPM/Ember addons
+
+## Usage
+
+This component provides an `{{component-playground}}` component. An instance of the [Ivy CodeMirror](https://github.com/IvyApp/ivy-codemirror) drives the text editor inside the component. The component will attempt to compile any text entered and if successful it will render the output using a `{{partial}}`.
+
+TODO: Options?
+TODO: ivy-codemirror configs?
 
 ## Running
 
@@ -23,5 +27,3 @@ This README outlines the details of collaborating on this Ember addon.
 ## Building
 
 * `ember build`
-
-For more information on using ember-cli, visit [http://ember-cli.com/](http://ember-cli.com/).

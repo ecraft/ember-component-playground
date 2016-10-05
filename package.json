@@ -1,7 +1,7 @@
 {
   "name": "ember-component-playground",
-  "version": "0.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "version": "1.0.0",
+  "description": "Dynamic playground for rendering examples of components",
   "directories": {
     "doc": "doc",
     "test": "tests"
@@ -40,10 +40,10 @@
     "loader.js": "^4.0.1"
   },
   "keywords": [
-    "ember-addon"
+    "ember-addon",
+    "component-playground"
   ],
   "dependencies": {
-    "codemirror": "^5.19.0",
     "ember-cli-babel": "^5.1.6",
     "ember-cli-htmlbars": "^1.0.3",
     "ember-cli-htmlbars-inline-precompile": "^0.3.1",
