@@ -1,14 +1,24 @@
 import Ember from 'ember';
 import hbs from 'htmlbars-inline-precompile';
-const { Component } = Ember;
+const { Component, ActionHandler } = Ember;
 
-export default Component.extend({
+export default Component.extend(ActionHandler, {
+
+  // Passed Props
+  // ---------------------------------------------------------------------------
+
+  contextActions: {},
+
+  // Properties
+  // ---------------------------------------------------------------------------
 
   classNames: ['ember-component-playground'],
 
   layout: hbs`
     <div class="playground-preview">
-      {{component-playground.playground-preview code=code}}
+      {{component-playground.playground-preview
+        code=code
+        contextActions=contextActions}}
     </div>
 
     <div class="playground-code">
@@ -18,6 +28,9 @@ export default Component.extend({
         valueUpdated=(action "codeChange")}}
     </div>
   `,
+
+  // Actions
+  // ---------------------------------------------------------------------------
 
   actions: {
     codeChange(code) {
