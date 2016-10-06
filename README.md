@@ -3,8 +3,18 @@
 An Ember component for real time rendering of components.
 
 ## Installation
+_The playground relies on `ivy-codemirror` to generate the code editor._
 
-TODO: Publish to NPM/Ember addons
+```
+ember install ember-component-playground
+ember install ivy-codemirror
+```
+
+Update `ember-cli-build` with this import to compile templates at runtime:
+
+```
+app.import('bower_components/ember/ember-template-compiler.js');
+```
 
 ## Usage
 

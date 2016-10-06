@@ -15,7 +15,7 @@ module.exports = function(defaults) {
     }
   });
 
-  // Required to compile templates at runtime?
+  // Required to compile templates at runtime
   app.import('bower_components/ember/ember-template-compiler.js');
 
   /*
