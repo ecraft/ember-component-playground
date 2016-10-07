@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.3 (10-06-2016)
+
+Changed:
+- Updated README to provide more information about the component's purpose and how to use it
+
 ## 1.1.2 (10-06-2016)
 
 Changed:
