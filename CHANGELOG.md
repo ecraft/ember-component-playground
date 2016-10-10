@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.2.0 (10-10-2016)
+Added:
+- `debounceRate` argument to `component-playground`
+- Include of template compiler moved to addon `include` hook in `index.js`
+
 ## 1.1.3 (10-06-2016)
 
 Changed:
