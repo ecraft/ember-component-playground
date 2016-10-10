@@ -3,24 +3,30 @@
 An Ember component for realtime rendering of your app's components based on input you provide to an inline code-editor.
 
 
-This component is generally intended for use within a documentation context, for providing examples of components and tweaking their attributes
-to see how they are affected in realtime. However, you may find other uses for it beyond this.
+This component is generally intended for use within a documentation context, for providing examples of components and tweaking their attributes to see how they are affected in realtime. However, you may find other uses for it beyond this.
 
 ## Installation
 
 **The playground requires `ivy-codemirror` to generate the code editor.**
-
-After installing this addon, in your consuming project, run the following:
 
 ```
 ember install ember-component-playground
 ember install ivy-codemirror
 ```
 
-Then, update your project's `ember-cli-build` with this `import` statement to enable compilation templates at runtime:
+Base styles are exported at `ember-component-playground/_styles.scss`. If you're using [ember-cli-sass](https://github.com/aexmachina/ember-cli-sass): you can import them:
+`@import 'ember-component-playground/styles'`;
+
+By default, the code editor doesn't have a language or theme. Include a config for [ivy-codemirror](https://github.com/IvyApp/ivy-codemirror) in your `ember-cli-build.js` file:
 
 ```
-app.import('bower_components/ember/ember-template-compiler.js');
+var app = new EmberApp(defaults, {
+  // Add options here
+  codemirror: {
+    modes: ['handlebars'],
+    themes: ['monokai']
+  },
+});
 ```
 
 You're golden!
@@ -36,7 +42,6 @@ You can optionally supply starting code to the component with the `code` attribu
 ```
 
 TODO: Options?
-TODO: ivy-codemirror configs?
 
 ## Running
 
