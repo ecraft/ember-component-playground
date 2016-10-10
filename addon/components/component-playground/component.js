@@ -28,6 +28,12 @@ export default Component.extend(ActionHandler, {
    * @type {Object}
    */
   contextActions: {},
+  /**
+   * Optional debounce for rerendering
+   * @param debounceRate
+   * @type {number}
+   */
+  debounceRate: 0,
 
   // Properties
   // ---------------------------------------------------------------------------
@@ -57,6 +63,7 @@ export default Component.extend(ActionHandler, {
     <div class="playground-preview">
       {{component-playground.playground-preview
         code=code
+        debounceRate=debounceRate
         contextActions=contextActions}}
     </div>
 

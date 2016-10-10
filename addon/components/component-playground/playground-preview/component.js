@@ -32,6 +32,12 @@ export default Component.extend({
    * @type {Object}
    */
   contextActions: {},
+  /**
+   * Optional debounce for rerendering
+   * @param debounceRate
+   * @type {number}
+   */
+  debounceRate: 0,
 
   // Properties
   // ---------------------------------------------------------------------------
@@ -185,7 +191,12 @@ export default Component.extend({
    */
   didReceiveAttrs({ newAttrs }) {
     if (!newAttrs.code.value) { newAttrs.code.value = ''; }
-    Ember.run.debounce(this, '_updatePreview', newAttrs.code.value, 500);
+
+    if (this.get('debounceRate')) {
+      Ember.run.debounce(this, '_updatePreview', newAttrs.code.value, this.get('debounceRate'));
+    } else {
+      this._updatePreview(newAttrs.code.value);
+    }
   },
 
   // Actions
