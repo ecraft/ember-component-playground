@@ -34,6 +34,22 @@ export default Component.extend(ActionHandler, {
    * @type {number}
    */
   debounceRate: 0,
+  /**
+   * The codemirror syntax mode. Note that the assets for the mode must be
+   * imported during the build process. You can do this by creating a
+   * `codemirror` configuration in you ember-cli-build.
+   * @type {string}
+   */
+  mode: 'handlebars',
+  /**
+   * The codemirror theme. Note that the stylesheet must be imported during the
+   * build process for the theme to work. You can do this by creating a
+   * `codemirror` configuration in your `ember-cli-build`.
+   * @property theme
+   * @type {string}
+   * @default panda-syntax
+   */
+  theme: 'panda-syntax',
 
   // Properties
   // ---------------------------------------------------------------------------
@@ -53,27 +69,6 @@ export default Component.extend(ActionHandler, {
    * @type {string}
    */
   code: '',
-  /**
-   * The component's native `layout` property. Allows us to set up a dynamic
-   * template completely within the context of the component's JS file.
-   * @property layout
-   * @type {Function|String}
-   */
-  layout: hbs`
-    <div class="playground-preview">
-      {{component-playground.playground-preview
-        code=code
-        debounceRate=debounceRate
-        contextActions=contextActions}}
-    </div>
-
-    <div class="playground-code">
-      {{ivy-codemirror classNames="code-mirror"
-        value=code
-        options=(hash lineNumbers=true mode="handlebars" theme="monokai")
-        valueUpdated=(action "codeChange")}}
-    </div>
-  `,
 
   // Actions
   // ---------------------------------------------------------------------------
@@ -96,5 +91,23 @@ export default Component.extend(ActionHandler, {
     codeChange(code) {
       this.set('code', code);
     }
-  }
+  },
+
+  // Layout
+  // ---------------------------------------------------------------------------
+  layout: hbs`
+    <div class="playground-preview">
+      {{component-playground.playground-preview
+        code=code
+        debounceRate=debounceRate
+        contextActions=contextActions}}
+    </div>
+
+    <div class="playground-code">
+      {{ivy-codemirror classNames="code-mirror"
+        value=code
+        options=(hash lineNumbers=true mode=mode theme=theme)
+        valueUpdated=(action "codeChange")}}
+    </div>
+  `
 });

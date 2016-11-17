@@ -1,22 +1,17 @@
-/*jshint node:true*/
-/* global require, module */
 var EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
 
 module.exports = function(defaults) {
   var app = new EmberAddon(defaults, {
 
-    sassOptions: {
-      extension: 'scss'
+    codemirror: {
+      modes: ['javascript'],
+      themes: ['monokai']
     },
 
-    codemirror: {
-      modes: ['handlebars'],
-      themes: ['monokai']
+    sassOptions: {
+      extension: 'scss'
     }
   });
-
-  // Required to compile templates at runtime
-  app.import('bower_components/ember/ember-template-compiler.js');
 
   /*
     This build file specifies the options for the dummy test app of this
