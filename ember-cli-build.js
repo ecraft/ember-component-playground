@@ -3,11 +3,6 @@ var EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
 module.exports = function(defaults) {
   var app = new EmberAddon(defaults, {
 
-    codemirror: {
-      modes: ['javascript'],
-      themes: ['monokai']
-    },
-
     sassOptions: {
       extension: 'scss'
     }

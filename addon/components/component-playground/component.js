@@ -104,7 +104,7 @@ export default Component.extend(ActionHandler, {
     </div>
 
     <div class="playground-code">
-      {{ivy-codemirror classNames="code-mirror"
+      {{code-mirror classNames="code-mirror"
         value=code
         options=(hash lineNumbers=true mode=mode theme=theme)
         valueUpdated=(action "codeChange")}}

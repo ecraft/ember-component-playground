@@ -100,9 +100,11 @@ Contributions are welcome! Project development is documented below:
 ### TODO:
 
 - [x] Make `panda-syntax` the default theme
+- [x] Make `htmlhandlebars` the default mode
 - [x] Make codemirror theme configurable
 - [x] Document Node >= 4.3 requirements
 - [] Document adding `Source Sans Pro` for fonts
 - [] Ability to set default themes. Maybe by exporting your own component-playground instance pulled from the addon namespace
 - [] Better how it works documentation for a high level overview
 - [] Include picture in README of actual usage
+- [x] Include `htmlhandlebars`
