@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import CodeMirror from 'codemirror';
 
-const { Component } = Ember;
+const { Component, run } = Ember;
 
 export default Component.extend({
 
@@ -9,22 +9,14 @@ export default Component.extend({
   // ---------------------------------------------------------------------------
 
   /**
-   * Pass a `mode` to configure the editor instance's highlighting mode. Defaults
-   * to `htmlhandlebars` because that's all you need for the component playground,
-   * but you could use this component for other schemes if you want.
-   * @property mode
-   * @type {string}
-   * @default htmlhandlebars
+   * The configuration object passed to the editor created in `didInsertElement`
+   * is created with defaults in the `init` hook to prevent multiple component
+   * instances on the same page inheriting the same configs object due to
+   * prototype inheritance.
+   * @property configuration
+   * @type {Object}
+   * @default { mode: 'htmlhandlebars', theme: 'panda-syntax', lineNumbers: true }
    */
-  mode: 'htmlhandlebars',
-  /**
-   * Pass a `theme` to configure the editor instance's theme. Defaults
-   * to `panda-syntax` because it's the most beautiful theme in the internet.
-   * @property theme
-   * @type {string}
-   * @default panda-syntax
-   */
-  theme: 'panda-syntax',
   /**
    * Allows for passing a starting value that is set in the editor inside
    * `didInsertElement` hook
@@ -53,8 +45,54 @@ export default Component.extend({
    */
   _codeMirrorEditor: null,
 
+  // Methods
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Method for use with scheduling a `run.once`. Handle dispatching valueUpdated
+   * action.
+   * @method _handleEditorChanged
+   * @param {Object} codeMirror The CodeMirror instance
+   * @param {Object} changeObj  Hash of changes to editor
+   */
+  _handleEditorChanged(codeMirror, changeObj) {
+    this.get('valueUpdated')(codeMirror.getValue(), codeMirror, changeObj);
+  },
+  /**
+   * Callback bound to this CodeMirror instance's change event. Schedule an aciton
+   * dispatch once per render to notify consuming component of change.
+   * @method handleEditorChanged
+   * @param {Object} codeMirror The CodeMirror instance
+   * @param {Object} changeObj  Hash of changes to editor
+   */
+  handleEditorChanged(...args) {
+    run.once(this, '_handleEditorChanged', ...args);
+  },
+
   // Hooks
   // ---------------------------------------------------------------------------
+
+  init() {
+    this._super(...arguments);
+
+    // Bind callbacks for editor events
+    this.handleEditorChanged = this.handleEditorChanged.bind(this);
+
+    // Handle default configuration validation
+    const configuration = this.get('configuration');
+    const defaultConfiguration = {
+      mode: 'htmlhandlebars',
+      theme: 'panda-syntax',
+      lineNumbers: true
+    };
+
+    // Finally create not prototype inheritable options object with defaults
+    if (!configuration) { return this.set('configuration', defaultConfiguration); }
+
+    if (!configuration.mode) { this.set('configuration.mode', 'htmlhandlebars'); }
+    if (!configuration.theme) { this.set('configuration.theme', 'panda-syntax'); }
+    if (configuration.lineNumbers === undefined) { this.set('configuration.lineNumbers', true); }
+  },
 
   /**
    * When this element has been inserted into the DOM, use the Codemirror
@@ -63,14 +101,34 @@ export default Component.extend({
    * @event didInsertElement
    */
   didInsertElement() {
-    let { theme, mode } = this.getProperties('theme', 'mode');
-
     // LET THE GAMES BEGIN!! Create and store ref to new editor using nifty from text area and passing configs
-    this.set('_codeMirrorEditor', CodeMirror.fromTextArea(this.get('element'), { theme, mode }));
+    this.set('_codeMirrorEditor', CodeMirror.fromTextArea(this.get('element'), this.get('configuration')));
 
     // If a starting value was passed in to this component, set it on the editor
     if (this.get('value')) {
       this.get('_codeMirrorEditor').setValue(this.get('value'));
     }
+
+    // Bind listener to codemirror for update events
+    this.get('_codeMirrorEditor').on('change', this.handleEditorChanged);
+  },
+  /**
+   * On render of this component, check that the editor value matches what is
+   * passed in, update the editor if out of syn
+   * @event didRender
+   */
+  didRender() {
+    if (this.get('value') !== this.get('_codeMirrorEditor').getValue()) {
+      this.get('_codeMirrorEditor').setValue(this.get('value') || '');
+    }
+  },
+  /**
+   * Clean up event listeners and ensure garbage collection
+   * @event willDestroyElement
+   */
+  willDestroyElement() {
+    this.get('_codeMirrorEditor').off('change', this.handleEditorChanged);
+    // Is this necessary or does garbage collection get this?
+    delete this._codeMirror;
   }
 });

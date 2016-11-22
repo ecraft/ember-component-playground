@@ -11,13 +11,13 @@ const { Component, ActionHandler } = Ember;
  * context, also allowing users to experiment with a component's settings in real
  * time (where applicable).
  *
- * @class Component.ComponentPlayground
- * @property contextActions
- * @type {Object}
+ * @class ComponentPlayground
+ * @constructor
+ * @extends Ember.Component
  */
 export default Component.extend(ActionHandler, {
 
-  // Passed Props
+  // Configurations
   // ---------------------------------------------------------------------------
 
   /**
@@ -32,24 +32,17 @@ export default Component.extend(ActionHandler, {
    * Optional debounce for rerendering
    * @param debounceRate
    * @type {number}
+   * @default 0
    */
   debounceRate: 0,
   /**
-   * The codemirror syntax mode. Note that the assets for the mode must be
-   * imported during the build process. You can do this by creating a
-   * `codemirror` configuration in you ember-cli-build.
+   * The code string entered into the code mirror editor. Passed into the child
+   * preview component so it can be rendered as an hbs template partial.
+   *
+   * @property code
    * @type {string}
    */
-  mode: 'handlebars',
-  /**
-   * The codemirror theme. Note that the stylesheet must be imported during the
-   * build process for the theme to work. You can do this by creating a
-   * `codemirror` configuration in your `ember-cli-build`.
-   * @property theme
-   * @type {string}
-   * @default panda-syntax
-   */
-  theme: 'panda-syntax',
+  code: '',
 
   // Properties
   // ---------------------------------------------------------------------------
@@ -61,30 +54,15 @@ export default Component.extend(ActionHandler, {
    * @type {Array}
    */
   classNames: ['ember-component-playground'],
-  /**
-   * The code string entered into the code mirror editor. Passed into the child
-   * preview component so it can be rendered as an hbs template partial.
-   *
-   * @property code
-   * @type {string}
-   */
-  code: '',
 
   // Actions
   // ---------------------------------------------------------------------------
-
-  /**
-   * The component's actions hash
-   *
-   * @property actions
-   * @type {Object}
-   */
   actions: {
     /**
      * Sent by the codemirror instance to alert the playground that the text
      * entered into the component's editor has changed.
      *
-     * @method codeChange
+     * @method actions.codeChange
      * @param {String} code The code entered into the codemirror editor, to be rendered as an hbs template
      * @return {undefined}
      */
@@ -104,10 +82,7 @@ export default Component.extend(ActionHandler, {
     </div>
 
     <div class="playground-code">
-      {{code-mirror classNames="code-mirror"
-        value=code
-        options=(hash lineNumbers=true mode=mode theme=theme)
-        valueUpdated=(action "codeChange")}}
+      {{code-mirror classNames="code-mirror" value=code valueUpdated=(action "codeChange")}}
     </div>
   `
 });
