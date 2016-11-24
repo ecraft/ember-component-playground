@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.2 (11-24-2016)
+Fixed:
+- Branches :sigh:
+
 ## 1.4.1 (11-24-2016)
 Fixed:
 - Attempting to fix `addAddonToProject` installing exact version instead of relative minor version
