@@ -3,6 +3,44 @@ import CodeMirror from 'codemirror';
 
 const { Component, run } = Ember;
 
+/**
+ * Transforms a lowly `<textarea>` into a magical in browser editor using the
+ * very rad CodeMirror library.
+ *
+ * ### Configuration
+ * Each instance is preloaded with default configurations, but they can be
+ * overridden by passing in an object `configuration` like so:
+ * ```handlebars
+ * {{code-mirror configuration=(hash mode="javascript" lineNumbers=false)}}
+ * ```
+ *
+ * Configuration | Default | Description
+ * --- | --- | ---
+ * `mode` | htmlhandlebars | Syntax highlighting mode, eg `javascript` or `css`
+ * `theme` | panda-syntax | Sets styles that should apply to editor
+ * `lineNumbers` | true | Show/hide editor line numbers
+ *
+ * ### Initial Value
+ * You can prefill the editor with any text by passing it in the `value` property.
+ *
+ * ### Dev Overview
+ * This component works by:
+ * 1. Validating editor configurations during `init`
+ * 2. When we know element is in DOM (`didInsertElement`) we call the CodeMirror
+ *    method `fromTextArea` and pass it this component's element and the configs.
+ *    CodeMirror magically transforms this component into an editor!
+ * 3. Attach a listener to the editor, it will dispatch a change event, which we
+ *    use to handle call the passed action closure `valueUpdated` with the
+ *    change data
+ * 4. On render, we check that the passed in value still matches the editor value,
+ *    if it doesn't we got out of sync somehow and update the editor with that
+ *    value
+ * 5. On destroy we remove the event listener and delete the editor instance
+ *
+ * @class CodeMirror
+ * @constructor
+ * @extends Ember.Component
+ */
 export default Component.extend({
 
   // Configurations
@@ -25,6 +63,13 @@ export default Component.extend({
    * @default ''
    */
   value: '',
+  /**
+   * Action closure that will be called anytime the editor changes. Use this to
+   * handle DDAU udpate of the editor value.
+   * @property valueUpdated
+   * @type {function}
+   */
+  valueUpdated: null,
 
   // Properties
   // ---------------------------------------------------------------------------
@@ -72,6 +117,11 @@ export default Component.extend({
   // Hooks
   // ---------------------------------------------------------------------------
 
+  /**
+   * On init check for a configuration and if one is not present set default
+   * values for CodeMirror instance
+   * @method init
+   */
   init() {
     this._super(...arguments);
 
@@ -89,11 +139,11 @@ export default Component.extend({
     // Finally create not prototype inheritable options object with defaults
     if (!configuration) { return this.set('configuration', defaultConfiguration); }
 
+    // If a configuration was passed in, validate existence of each option
     if (!configuration.mode) { this.set('configuration.mode', 'htmlhandlebars'); }
     if (!configuration.theme) { this.set('configuration.theme', 'panda-syntax'); }
     if (configuration.lineNumbers === undefined) { this.set('configuration.lineNumbers', true); }
   },
-
   /**
    * When this element has been inserted into the DOM, use the Codemirror
    * `fromTextArea` to transform this ugly duckling into a beautiful CodeMirror
@@ -128,7 +178,7 @@ export default Component.extend({
    */
   willDestroyElement() {
     this.get('_codeMirrorEditor').off('change', this.handleEditorChanged);
-    // Is this necessary or does garbage collection get this?
+    // @TODO: Is this necessary or does garbage collection get this?
     delete this._codeMirror;
   }
 });
