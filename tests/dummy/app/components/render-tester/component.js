@@ -3,5 +3,5 @@ import hbs from 'htmlbars-inline-precompile';
 const { Component } = Ember;
 
 export default Component.extend({
-  layout: hbs`<p>RENDER-TESTER</p>`
+  layout: hbs`<h1>RENDER-TESTER</h1>{{yield}}`
 });

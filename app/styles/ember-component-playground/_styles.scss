@@ -2,13 +2,6 @@
 // Ember Component Playground Styles
 // ========================================================
 
-// RAD PANDA THEME
-// ---------------------------------------------------------------------------
-@import 'panda-syntax';
-
-// Components
-// ---------------------------------------------------------------------------
-
 .ember-component-playground {
   width: 100%;
   display: flex;
@@ -29,21 +22,25 @@
     border-right: none;
   }
 
-  // ========================================================
-  // Preview
-  // ========================================================
+  // Preview Component
+  // ---------------------------------------------------------------------------
 
+  // Make preview full height and set up flexbox props to push error div to bottom
   .preview-wrapper {
     min-height: 100%;
     display: flex;
     flex-direction: column;
   }
 
+  // The wrapper for rendered partials, also a flexbox to perfectly center rendered content
   .partial-wrapper {
-    padding: 20px;
-    flex: 1;
+    flex: 1; // Flexbox magics for take up the space
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
+  // Compiler errors are moved to bottom with flex-end
   .compiler-error {
     width: 100%;
     background-color: #fcf8e3;
@@ -56,10 +53,8 @@
     }
   }
 
-
-  // ========================================================
-  // Code Input
-  // ========================================================
+  // Editor Component
+  // ---------------------------------------------------------------------------
 
   .playground-code {
     .code-mirror {

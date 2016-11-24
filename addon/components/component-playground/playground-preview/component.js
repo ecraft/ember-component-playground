@@ -14,20 +14,30 @@ const { Component, getOwner, HTMLBars } = Ember;
  * went wrong/you placed some bad input into the code editor, you can see what
  * the compiler error was.
  *
- * @class Component.ComonentPlayground.PlaygroundPreview
+ * The component will attempt to validate the template before compiling and
+ * rendering by checking for actions inside the string. If it finds an action
+ * without a matching action in the `contextActions` it will create a no-op for
+ * you.
+ *
+ * ### contextActions
+ * You can pass contextActions to this component that are mounted in the actions
+ * hash. Pass actual functions if needed. No ops will be assigned to passed
+ * action names. This is helpful if you just need to prevent compile
+ * errors from happening.
+ *
+ * @class ComonentPlayground.PlaygroundPreview
  * @constructor
  * @extends Ember.Component
  */
 export default Component.extend({
 
-  // Passed Props
+  // Configurations
   // ---------------------------------------------------------------------------
 
   /**
    * A hash of actions from the parent instance of the `ComponentPlayground`
    * component. These are automatically passed into the preview based on what
    * the user has defined for a specific instance of the `ComponentPlayground`.
-   *
    * @property contextActions
    * @type {Object}
    */
@@ -36,6 +46,7 @@ export default Component.extend({
    * Optional debounce for rerendering
    * @param debounceRate
    * @type {number}
+   * @default 0
    */
   debounceRate: 0,
 
@@ -46,7 +57,6 @@ export default Component.extend({
    * Placeholder for errors output from the template compiler; used for displaying
    * compiler errors to the user so they can debug issues with their code in
    * the playground's code editor.
-   *
    * @property compilerError
    * @type {string}
    */
@@ -54,70 +64,50 @@ export default Component.extend({
   /**
    * The name of the registered template partial to display as the playground's
    * output.
-   *
    * @property partialName
    * @type {string}
    */
   partialName: '',
   /**
-   * The component's internal `classNames` property. Used to apply classes for
-   * styling purposes.
-   *
+   * Bind class `preview-wrapper`
    * @property classNames
    * @type {Array}
    */
   classNames: ['preview-wrapper'],
-  /**
-   * The component's internal `layout` property; allows us to dynamically set
-   * the component's template so that it includes the compiled output from the
-   * playground's code editor.
-   *
-   * @property layout
-   * @type {Function|String}
-   */
-  layout: hbs`
-    <div class="partial-wrapper">
-      {{partial partialName}}
-    </div>
-    <div class="compiler-error">
-      <p class="error-message">{{compilerError}}</p>
-    </div>
-  `,
 
   // Methods
   // ---------------------------------------------------------------------------
-
 
   /**
    * Looks through the passed-in template string and checks for action helpers;
    * when it finds some, it checks for the actions referenced and registers no-ops
    * for them on this component's context so that the application doesn't explode
    * when trying to reference a non-existent action.
-   *
    * @method _checkActionRefs
    * @param {String} templateString The template string to run the check for action matches on
    * @return {undefined}
    */
   _checkActionRefs(templateString) {
-
+    // Do less without a template
     if (!templateString) { return; }
-
+    // Action regexes
     const firstFilter = /action\s"(\w*?)"/gim;
     const secondFilter = /\'(.*?)\'/gi;
+    // Match on all actions
     let matchedActions = templateString.match(firstFilter);
 
     if (!matchedActions) { return; }
 
+    // Build map of action names only
     let actionNames = matchedActions.map(item => {
       return item.replace(/\"/g, '\'').match(secondFilter)[0].replace(/\'/g, '');
     });
 
-    // Loop through the list of actions and set up no-ops on the local context
-    // so that the test app doesn't explode
+    // Loop through the list of actions and set up no-ops for missing actions
+    // on the local context so that the test app doesn't explode
     actionNames.forEach(action => {
       if (!this.get(`actions.${action}`)) {
-        this.set(`actions.${action}`, function() {});
-        console.log(`Setting up a no-op for action name of ${action}`);
+        this.set(`actions.${action}`, function() { console.log(`${action} called`); });
       }
     });
   },
@@ -130,9 +120,9 @@ export default Component.extend({
    * New partials are created for every change, using a date string as the
    * partial name to avoid collisions.
    *
+   * @TODO We should probably clean out old partials for to keep memory usage down
    * @method _updatePreview
-   * @param {[type]} templateString [description]
-   * @return {[type]}
+   * @param {string} templateString Editor value to use as the template contents
    */
   _updatePreview(templateString) {
     try {
@@ -160,20 +150,21 @@ export default Component.extend({
    * available at compile time.
    *
    * @method init
-   * @return {unefined}
    */
   init() {
     this._super(...arguments);
 
-    const actions = this.get('contextActions');
-    const yellAboutIt = (thang) => { console.log(`${thang} called`); };
+    const contextActions = this.get('contextActions');
+    const yellAboutIt = thang => { console.log(`${thang} called`); };
 
-    for (let action in actions) {
+    for (let action in contextActions) {
+      if (!(contextActions.hasOwnProperty(action))) { return; }
+      // Do less if already set
+      if (this.get(`actions.${action}`)) { return; }
 
-      if (!(actions.hasOwnProperty(action))) { return; }
-      if (this.get(`actions.${action}`)) { return; } // already set, do less
-
-      if (typeof actions[action] === 'function') {
+      // If an actual function is passed in, mount it, otherwise mount a helpful
+      // logging event for that action (can be used for passing action names only)
+      if (typeof contextActions[action] === 'function') {
         this.set(`actions.${action}`, action);
       } else {
         this.set(`actions.${action}`, yellAboutIt(action));
@@ -190,7 +181,7 @@ export default Component.extend({
    * @return {[type]}
    */
   didReceiveAttrs({ newAttrs }) {
-    if (!newAttrs.code.value) { newAttrs.code.value = ''; }
+    if (!newAttrs.code || !newAttrs.code.value) { newAttrs.code.value = ''; }
 
     if (this.get('debounceRate')) {
       Ember.run.debounce(this, '_updatePreview', newAttrs.code.value, this.get('debounceRate'));
@@ -201,13 +192,17 @@ export default Component.extend({
 
   // Actions
   // ---------------------------------------------------------------------------
+  actions: {},
 
-  /**
-   * The component actions hash; to be filled in by the parent context, and/or
-   * by failsafe action detection
-   *
-   * @property actions
-   * @type {Object}
-   */
-  actions: {}
+  // Layout
+  // ---------------------------------------------------------------------------
+  layout: hbs`
+    {{! Wrapping element: <div class="playground-preview"> }}
+    <div class="partial-wrapper">
+      {{partial partialName}}
+    </div>
+    <div class="compiler-error">
+      <p class="error-message">{{compilerError}}</p>
+    </div>
+  `
 });
