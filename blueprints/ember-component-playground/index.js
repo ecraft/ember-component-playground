@@ -8,6 +8,6 @@ module.exports = {
   },
 
   afterInstall: function() {
-    return this.addAddonToProject('ember-cli-codemirror-shim', '^1.0.0');
+    return this.addAddonToProject({name: 'ember-cli-codemirror-shim', target: '^1.1.1' });
   }
 };
