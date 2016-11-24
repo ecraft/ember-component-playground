@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.1 (11-24-2016)
+Fixed:
+- Attempting to fix `addAddonToProject` installing exact version instead of relative minor version
+
 ## 1.4.0 (11-24-2016)
 Added:
 - CodeMirror library now pulled in from Node modules using `ember-cli-codemirror-shim`
