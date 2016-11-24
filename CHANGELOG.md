@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.4.0 (11-24-2016)
+Added:
+- CodeMirror library now pulled in from Node modules using `ember-cli-codemirror-shim`
+- Validation of default `codemirror` options for consuming application
+- Custom `code-mirror` component for rendering a CodeMirror editor. It's rad.
+
+Fixed:
+- Documentation cleanup for using and configuring components
+
+Removed:
+- `ivy-codemirror` dependency including `bower` CodeMirror dependency
+- Internal `panda-syntax` styles, Node version of CodeMirror has them!
+
+## 1.3.0 (11-17-2016)
+Added:
+- Panda-syntax for editor
+
+Fixed:
+- Addon `include` hook `_super` syntax, now handles importing template compiler
+
 ## 1.2.0 (10-10-2016)
 Added:
 - `debounceRate` argument to `component-playground`
