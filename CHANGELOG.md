@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.5.0 (11-25-2016)
+Added:
+- Required structural styles are included in vendor file and imported in `index` file for maximum plug and play ease.
+
+Fixed:
+- Ensured this addon runs before the `ember-cli-codemirror-shim` by using the `before` config in package. Fixes default configs required by playground not being set.
+
 ## 1.4.2 (11-24-2016)
 Fixed:
 - Branches :sigh:
