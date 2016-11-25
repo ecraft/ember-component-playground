@@ -2,6 +2,15 @@
 // Ember Component Playground Styles
 // ========================================================
 
+// ========================================================
+// NOTE: Because these styles are structural for the
+// component playground, we are including a built css
+// version of them in the /vendor directory so they are
+// automagically pulled into consuming apps. If you change
+// this file you must build and update the vendor css
+// file as well
+// ========================================================
+
 .ember-component-playground {
   width: 100%;
   display: flex;

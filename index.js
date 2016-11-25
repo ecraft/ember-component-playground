@@ -59,5 +59,7 @@ module.exports = {
     app.import('bower_components/ember/ember-template-compiler.js');
     // Required for ember template highlighting
     app.import(`${vendor}/htmlhandlebars.js`);
+    // Structural styles for the playground
+    app.import(`${vendor}/ember-component-playground/styles.css`);
   }
 };
