@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.6.0 (12-11-2016)
+Added:
+- Better test compatibility with `data-test` attr binding
+- Wrote real tests to verify functionality
+
+Fixed:
+- Changed subcomponent references in templates to use slash syntax
+
 ## 1.5.0 (11-25-2016)
 Added:
 - Required structural styles are included in vendor file and imported in `index` file for maximum plug and play ease.
