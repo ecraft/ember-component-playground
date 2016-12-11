@@ -60,6 +60,13 @@ export default Component.extend(ActionHandler, {
   // ---------------------------------------------------------------------------
 
   /**
+   * Bind `data-test` attributes
+   *
+   * @property attributeBindings
+   * @type {Array}
+   */
+  attributeBindings: ['data-test'],
+  /**
    * Bind `ember-component-playground` to component
    * @property classNames
    * @type {Array}
@@ -85,10 +92,11 @@ export default Component.extend(ActionHandler, {
   layout: hbs`
     {{! Wrapping element: <div class="ember-component-playground"> }}
     <div class="playground-preview">
-      {{component-playground.playground-preview
+      {{component-playground/playground-preview
         code=code
         debounceRate=debounceRate
-        contextActions=contextActions}}
+        contextActions=contextActions
+        data-test=(concat data-test '-preview')}}
     </div>
 
     <div class="playground-code">
@@ -96,7 +104,8 @@ export default Component.extend(ActionHandler, {
         classNames="code-mirror"
         value=code
         configuration=configuration
-        valueUpdated=(action "codeChange")}}
+        valueUpdated=(action "codeChange")
+        data-test=(concat data-test '-code')}}
     </div>
   `
 });

@@ -1,4 +1,4 @@
-# Ember Component Playground
+# Ember Component Playground [![Build Status](https://travis-ci.org/healthsparq/ember-component-playground.svg?branch=master)](https://travis-ci.org/healthsparq/ember-component-playground)
 
 An Ember component for realtime rendering of your app's components using an instance of the in browser codemirror code editor. This component was created for use within a documentation context, for providing examples of components and tweaking their attributes to see how they are affected in realtime. However, you may find other uses for it beyond this.
 
