@@ -1,5 +1,6 @@
 import Ember from 'ember';
 import CodeMirror from 'codemirror';
+import hbs from 'htmlbars-inline-precompile';
 
 const { Component, run } = Ember;
 
@@ -73,6 +74,14 @@ export default Component.extend({
 
   // Properties
   // ---------------------------------------------------------------------------
+
+  /**
+   * Bind `data-test` attributes
+   *
+   * @property attributeBindings
+   * @type {Array}
+   */
+  attributeBindings: ['data-test'],
   /**
    * Using a tagname prop makes it really easy to call `CodeMirror.fromTextArea`
    * in the `didInsertElement` hook to make this component an editor.
@@ -180,5 +189,9 @@ export default Component.extend({
     this.get('_codeMirrorEditor').off('change', this.handleEditorChanged);
     // @TODO: Is this necessary or does garbage collection get this?
     delete this._codeMirror;
-  }
+  },
+
+  // Layout
+  // ---------------------------------------------------------------------------
+  layout: hbs`{{value}}`
 });

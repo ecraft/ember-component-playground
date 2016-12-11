@@ -54,6 +54,13 @@ export default Component.extend({
   // ---------------------------------------------------------------------------
 
   /**
+   * Bind `data-test` attributes
+   *
+   * @property attributeBindings
+   * @type {Array}
+   */
+  attributeBindings: ['data-test'],
+  /**
    * Placeholder for errors output from the template compiler; used for displaying
    * compiler errors to the user so they can debug issues with their code in
    * the playground's code editor.
@@ -202,7 +209,7 @@ export default Component.extend({
       {{partial partialName}}
     </div>
     <div class="compiler-error">
-      <p class="error-message">{{compilerError}}</p>
+      <p class="error-message" data-test="{{data-test}}-error-message">{{compilerError}}</p>
     </div>
   `
 });
