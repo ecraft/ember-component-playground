@@ -1,4 +1,7 @@
+/* eslint-env node */
 'use strict';
+
+const VersionChecker = require('ember-cli-version-checker');
 
 module.exports = {
   name: 'ember-component-playground',
@@ -12,6 +15,7 @@ module.exports = {
     // this.ui.writeLine('Configuring ember-component-playground');
 
     const vendor = this.treePaths.vendor;
+    const checker = new VersionChecker(this);
 
     // see: https://github.com/ember-cli/ember-cli/issues/3718
     // Find the parent app by crawling addon tree
@@ -56,7 +60,11 @@ module.exports = {
     app.options.codemirror = codemirrorConfig;
 
     // Required to compile templates at runtime
-    app.import('bower_components/ember/ember-template-compiler.js');
+    if (checker.forEmber().satisfies('>= 2.11.0')) {
+      app.import('vendor/ember/ember-template-compiler.js');
+    } else {
+      app.import('bower_components/ember/ember-template-compiler.js');
+    }
     // Required for ember template highlighting
     app.import(`${vendor}/htmlhandlebars.js`);
     // Structural styles for the playground
