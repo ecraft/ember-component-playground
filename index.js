@@ -1,3 +1,4 @@
+/* eslint-env node */
 'use strict';
 
 module.exports = {
@@ -56,7 +57,7 @@ module.exports = {
     app.options.codemirror = codemirrorConfig;
 
     // Required to compile templates at runtime
-    app.import('bower_components/ember/ember-template-compiler.js');
+    app.import(`${vendor}/ember-template-compiler.js`);
     // Required for ember template highlighting
     app.import(`${vendor}/htmlhandlebars.js`);
     // Structural styles for the playground

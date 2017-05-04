@@ -114,7 +114,9 @@ export default Component.extend({
     // on the local context so that the test app doesn't explode
     actionNames.forEach(action => {
       if (!this.get(`actions.${action}`)) {
+        /* eslint-disable no-console */
         this.set(`actions.${action}`, function() { console.log(`${action} called`); });
+        /* eslint-enable no-console */
       }
     });
   },
@@ -162,7 +164,9 @@ export default Component.extend({
     this._super(...arguments);
 
     const contextActions = this.get('contextActions');
+    /* eslint-disable no-console */
     const yellAboutIt = thang => { console.log(`${thang} called`); };
+    /* eslint-enable no-console */
 
     for (let action in contextActions) {
       if (!(contextActions.hasOwnProperty(action))) { return; }
