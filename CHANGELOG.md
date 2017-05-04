@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.7.0 (05-04-2017)
+Update Ember to v2.13
+
+Fixed:
+- template compiler import thanks to @mydea
+
 ## 1.6.0 (12-11-2016)
 Added:
 - Better test compatibility with `data-test` attr binding
