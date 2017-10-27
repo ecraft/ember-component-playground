@@ -1,5 +1,5 @@
 {
-  "name": "ember-component-playground",
+  "name": "@ecraft/ember-component-playground",
   "version": "1.8.0",
   "description": "Dynamic playground for rendering examples of components",
   "directories": {
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/healthsparq/ember-component-playground.git"
+    "url": "https://github.com/ecraft/ember-component-playground.git"
   },
   "engines": {
     "node": ">= 0.10.0"
