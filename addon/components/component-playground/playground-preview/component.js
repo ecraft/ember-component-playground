@@ -183,21 +183,36 @@ export default Component.extend({
     }
   },
   /**
-   * The component's native `didReceiveAttrs` hook. Used to send debounced
-   * requests to the `_updatePreview` method for rendering an updated template
-   * partial based on the parent's code editor input.
-   *
-   * @event didReceiveAttrs
-   * @param {[type]} { newAttrs } [description]
-   * @return {[type]}
-   */
-  didReceiveAttrs({ newAttrs }) {
-    if (!newAttrs.code || !newAttrs.code.value) { newAttrs.code.value = ''; }
+  * The component's native `didReceiveAttrs` hook. Used to send debounced
+  * requests to the `_updatePreview` method for rendering an updated template
+  * partial based on the parent's code editor input.
+  *
+  * Until Ember 2.13.0, didReceiveAttrs took an argument for it's new
+  * attributes. In newer versions, the newAttr argument will not be passed.
+  *
+  * https://www.emberjs.com/deprecations/v2.x/#toc_id-ember-views-lifecycle-hook-arguments
+  *
+  * @event didReceiveAttrs
+  * @param [type] newAttrs [description]
+  * @return [type]
+  */
+  didReceiveAttrs(newAttrs) {
+    if(newAttrs) { // post ember 2.13.0
+      if (!newAttrs.code || !newAttrs.code.value) { newAttrs.code.value = ''; }
 
-    if (this.get('debounceRate')) {
-      Ember.run.debounce(this, '_updatePreview', newAttrs.code.value, this.get('debounceRate'));
-    } else {
-      this._updatePreview(newAttrs.code.value);
+      if (this.get('debounceRate')) {
+        Ember.run.debounce(this, '_updatePreview', newAttrs.code.value, this.get('debounceRate'));
+      } else {
+        this._updatePreview(newAttrs.code.value);
+      }
+    }
+    else { // pre ember 2.13.0
+      this._super(...arguments);
+      if (this.get('debounceRate')) {
+        Ember.run.debounce(this, '_updatePreview', this.get('code') || '', this.get('debounceRate'));
+      } else {
+        this._updatePreview(this.get('code'));
+      }
     }
   },
 
